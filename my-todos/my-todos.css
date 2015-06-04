@@ -1,1 +1,4 @@
 /* CSS declarations go here */
+.done {
+    text-decoration: line-through;
+}

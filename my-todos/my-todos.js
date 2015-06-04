@@ -1,17 +1,34 @@
-if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
+Items = new Meteor.Collection('items');
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
+if (Meteor.isClient) {
+  Template.list.helpers({
+    lists: function() {
+      return Items.find();
+    },
+    doneClass: function() {
+      if(this.done) {
+        return 'done';
+      }
+      else {
+        return '';
+      }
     }
   });
-
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
+  
+  Template.list.events({
+    'click li': function() {
+      Items.update({_id: this._id}, {$set: {done: !this.done}});
+    }
+  });
+  
+  Template.controls.events({
+    'submit form': function(e) {
+      e.preventDefault();
+      
+      var mark = $(e.target).find('[name="newItem"]').val();
+      
+      Items.insert({mark: mark});
+      $(e.target).find('[name="newItem"]').val('');
     }
   });
 }
@@ -19,5 +36,15 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+    var items = [
+      {mark: '《Meteor is a realtime application》'},
+      {mark: '《Meteor will be a feature application in javascript》'}
+    ];
+    
+    if(Items.find().count() == 0) {
+      for(var i = 0; i < items.length; i++) {
+        Items.insert(items[i]);  
+      }
+    }
   });
 }

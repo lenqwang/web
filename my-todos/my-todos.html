@@ -1,14 +1,24 @@
-<head>https://web-qqcome110.c9.io/
+<head>
   <title>my-todos</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
+  {{> list}}
+  {{> controls}}
+  
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="controls">
+  <form>
+    <input type="text" name="newItem"/>
+    <input type="submit" value="添加"/>
+  </form>
+</template>
+
+<template name="list">
+  <ul>
+    {{#each lists}}
+    <li class="{{doneClass}}">{{mark}}</li>
+    {{/each}}
+  </ul>
 </template>
