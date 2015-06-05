@@ -7,7 +7,7 @@ use Meteor to build my first demo
 test owner files 
 
 
-### project directory
+### npm-demo directory
 
 ```
  npm i lenq.react-hot-loader
