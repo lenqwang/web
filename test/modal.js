@@ -1,156 +1,183 @@
 /*
-    usage:
-    
-    Modal.init({
-		title: '表格详情',
-		width: 800,
+	version: 0.0.2
+	// 初始化配置
+	Modal.init({
+		title: '标题',
+		content: '加载中...',
+		width: 'auto',
 		isDestory: true,
-		footer: '<button class="btn btn-primary" data-dismiss="modal">确定</button>',
-		content: '',
-		options: {
-			show: false,
-			backdrop: 'static'
-		},
-		callback: function() {
-			var that = this;
-			
-			// do sth..
+		callback: function() {},
+		buttons: [
+			{
+				type: 'button',
+				text: '确定',
+				classes: 'btn btn-primary',
+				events: {
+					click: function() {
+						alert('点击我弹出来了');
+					}
+				}
+			}
+		]
+	});
+	
+	// 事件集
+	// 
+	Modal.on('md.')
+	
+	// 拓展
+	Modal.fn({
+		getWidth: function() {
+			return this.opts.width;
 		}
 	});
 */
 
 var Modal = function() {
-	var template = function(title, content, footer) {
-		return '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">'+
-		  '<div class="modal-dialog">'+
-		    '<div class="modal-content">'+
-		      '<div class="modal-header">'+
-		        '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
-		          '<span aria-hidden="true">x</span>'+
-		        '</button>'+
-		        '<h4 class="modal-title">'+title+'</h4>'+
-		      '</div>'+
-		      '<div class="modal-body">'+
-		        content +
-		      '</div>'+
-		      '<div class="modal-footer">'+
-		      	footer +
-		      '</div>'+
-		    '</div>'+
-		  '</div>'+
-		'</div>';	
-	};
-
-	var Fn = function() {
-		
-	};
-
-	Fn.prototype.init = function(option) {
-		option = this.option = $.extend({
-			title: '提示',
+	var exports = {};
+	
+	var Md = function() {};
+	
+	Md.prototype.init = function(opts) {
+		// 初始化配置
+		opts = $.extend({
+			title: '标题',
+			content: '加载中...',
 			width: 'auto',
 			isDestory: true,
-			footer: '<button class="btn btn-primary" data-dismiss="modal">确定</button>',
-			callback: function() {},
-			content: '加载中...',
 			options: {
 				show: false,
 				backdrop: 'static'
-			}
-		}, option);
-
-		this.render();
+			},
+			callback: function() {},
+			buttons: [
+				{
+					type: 'button',
+					text: '确定',
+					classes: 'btn btn-primary',
+					attrs: {
+						'data-dismiss': 'modal'
+					}
+				}	
+			]
+		}, opts || {});
 		
-		// this.option.isDestory && this.destory();
-		// callback
-		option.callback && option.callback.call(this);
+		this.opts = opts;
+		
+		this.buildHtml();
+		this.renderHtml();
+		this.render();
 	};
+	
+	Md.prototype.buildHtml = function() {
+		var title = this.opts.title || '',
+			
+			el = $('<div />', {
+				'class': 'modal fade'
+			}),
+			
+			modal_dialog = $('<div />', {
+				'class': 'modal-dialog'
+			}),
 
-	Fn.prototype.renderModal = function() {
-		// 获取模版内容
-		var modal_html = this.getTemplate(this.option.title, this.option.content, this.option.footer);
-		// 模态对象
-		this.option.modal = $.parseHTML(modal_html);
+			modal_content = $('<div />', {
+				'class': 'modal-content'
+			}),
+
+			modal_header = $('<div />', {
+				'class': 'modal-header'
+			}).append('<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+		          '<span aria-hidden="true">x</span>'+
+		        '</button>'),
+
+			modal_body = $('<div />', {'class': 'modal-body'}),
+
+			modal_footer = $('<div />', {'class': 'modal-footer'}),
+			
+			modal_title = $('<h4 />', {'class': 'modal-title'});
+
+			modal_title.appendTo(modal_header);
+
+			modal_header.appendTo(modal_content);
+
+			modal_content.append(modal_header).append(modal_body).append(modal_footer);
+
+			modal_dialog.append(modal_content);
+
+			el.append(modal_dialog);
+			
+		this.modal = el;
+		this.dialog = modal_dialog;
+		this.title = modal_title;
+		this.footer = modal_footer;
+		this.body = modal_body;
 	};
-
-	Fn.prototype.setModal = function() {
-		this.modal = this.option.modal;
-		var opts = this.option.options;
-
-		$(this.modal).modal(opts);
+	
+	Md.prototype.renderHtml = function() {
+		var opt = this.opts;
+		
+		this.dialog.width(opt.width);
+		this.title.html(opt.title);
+		this.body.html(opt.content);
+		this.buildFooter();
+		
 	};
-
-	Fn.prototype.setWidth = function() {
-		var width = this.option.width,
-			modal = this.modal;
-
-		if(width) {
-			$(modal).find('.modal-dialog').width(width);
+	
+	Md.prototype.buildFooter = function() {
+		var buttons = this.opts.buttons,
+			footer = this.footer,
+			that = this,
+			ret = $.isArray(buttons) && buttons.length > 0,
+			i = 0;
+		
+		if(ret) {
+			for(; i < buttons.length; i++) {
+				var _button = buttons[i];
+				
+				$('<button />', {
+					'type': _button.type,
+				})
+				.attr(_button.attrs)
+				.text(_button.text)
+				.addClass(_button.classes)
+				.appendTo(footer)
+				.on(_button.events, {modal: that});
+			}
 		}
 	};
-
-	Fn.prototype.getTemplate = function(title, content, footer) {
-		var html = template(title, content, footer);
-
-		return html;
-	};
-
-	Fn.prototype.show = function() {
-		$(this.modal).modal('show');
-		this.destory();
-	};
-
-	Fn.prototype.render = function() {
-		this.renderModal();
-		// 设置模版
-		this.setModal();
-		// 设置模态宽度
-		this.setWidth();
-	};
-
-	Fn.prototype.setInfo = function(opts) {
-		opts = $.extend({},opts);
-		$(this.modal)
-			.find('.modal-title')
-				.html(opts.title || '')
-			.end()
-			.find('.modal-body')
-				.html(opts.content || '')
-			.end()
-			.find('.modal-footer')
-				.html(opts.footer || '');
-		this.render();
-	};
-
-	Fn.prototype.setTitle = function(title) {
-		$(this.modal).find('.modal-title').html(title);
-		this.render();
-	};
-
-	Fn.prototype.setFooter = function(html) {
-		$(this.modal).find('.modal-footer').html(html);
-		this.render();
-	};
-
-	Fn.prototype.setContent = function(html) {
-		$(this.modal).find('.modal-body').html(html);
-		// this.option.content = html;
-		// this.destory();
-		this.render();
-	}
-
-	Fn.prototype.destory = function() {
-		$(this.modal).on('hidden.bs.modal', function() {
+	
+	Md.prototype.render = function() {
+		this.modal.modal(this.opts.options);
+		this.modal.modal('show');
+		this.modal.on('hidden.bs.modal', function() {
 			$(this).data('bs.modal', null);
 			$(this).remove();
 		});
-		// this.render();
+		
 	};
-
-	return {
-		init: function(option) {
-			return new Fn().init(option);
+	
+	Md.prototype.close = function() {
+		this.modal.modal('hide');
+	};
+	
+	// Md.prototype.setInfo = function() {
+		
+	// };
+	
+	
+	exports.init = function(opts) {
+		return new Md().init(opts);
+	};
+	
+	exports.fn = function(obj) {
+		if($.isPlainObject(obj)) {
+			return $.extend(Md.prototype, obj);
+		}
+		else {
+			return $.extend(Md.prototype, {});
 		}
 	};
-
+	
+	
+	return exports;
 }();

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>测试modal.js</title>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" type="text/css" />
+        
+    </head>
+    <body>
+        <a id="btn" data-toggle="modal">click me</a>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="modal.js"></script>
+        <script>
+            // version 1
+            // Modal.init({
+            //     title: '测试',
+            //     content: '内容',
+            //     width: 500,
+            //     footer: '<button class="btn btn-primary" id="ok">确定</button>',
+            //     callback: function() {
+            //         var that = this;
+                    
+            //         $('#btn').click(function() {
+            //             that.show();
+                        
+            //         });
+                    
+            //         $(this.modal).on('click', '#ok', function() {
+            //             that.setInfo({
+            //                 title: '提示',
+            //                 content: '内容已改变',
+            //                 footer: '<button class="btn btn-default" data-dismiss="modal">取消</button>'
+            //             });
+            //         });
+            //     }
+            // });
+            
+            // version 2
+            $('#btn').click(function() {
+                
+                Modal.init({
+                    width: 200,
+                    buttons: [
+                        {
+                            type: 'button',
+                            text: '点击我',
+                            classes: 'btn btn-primary',
+                            attrs: {},
+                            events: {
+                                click: function(event) {
+                                    var that = event.data.modal;
+                                    
+                                    that.title.html('你是谁');
+                                    that.body.html('在弄什么东西呀');
+                                    $(this).text('提交中...');
+                                    that.render();
+                                    // that.close();
+                                }
+                            }
+                        }
+                    ]
+                });
+            });
+            
+        </script>
+    </body>
+</html>
