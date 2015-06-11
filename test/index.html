@@ -40,26 +40,31 @@
             $('#btn').click(function() {
                 
                 Modal.init({
-                    width: 200,
-                    buttons: [
-                        {
-                            type: 'button',
-                            text: '点击我',
-                            classes: 'btn btn-primary',
-                            attrs: {},
-                            events: {
-                                click: function(event) {
-                                    var that = event.data.modal;
+                    width: 200
+                    // buttons: [
+                    //     {
+                    //         type: 'button',
+                    //         text: '点击我',
+                    //         classes: 'btn btn-primary',
+                    //         attrs: {},
+                    //         events: {
+                    //             click: function(event) {
+                    //                 var that = event.data.modal;
                                     
-                                    that.title.html('你是谁');
-                                    that.body.html('在弄什么东西呀');
-                                    $(this).text('提交中...');
-                                    that.render();
-                                    // that.close();
-                                }
-                            }
-                        }
-                    ]
+                    //                 that.title.html('3s后窗口关闭');
+                    //                 that.body.html('loading...');
+                    //                 $(this).text('提交中...');
+                    //                 that.render();
+                                    
+                    //                 setTimeout(function() {
+                    //                     that.close();
+                    //                 }, 3000);
+                                    
+                                    
+                    //             }
+                    //         }
+                    //     }
+                    // ]
                 });
             });
             
