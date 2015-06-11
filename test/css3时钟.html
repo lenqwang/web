@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title></title>
+	<title>CSS时钟效果实现</title>
 	<style type="text/css">
 		body {
 			/*background-color: #ccc;*/
@@ -171,6 +171,8 @@
 			var strHtml = '';
 			for(var i=1; i<=12; i++){
 				var myAngle = (i-3)/6 * Math.PI;
+				// 相等于 (i - 3) * 30 * PI / 180
+				// 解释： 1点钟方向是-60度，一个圆12等分就是没分30度
 
 				var myX = radius + radius*Math.cos(myAngle), // x=r+rcos(θ)
 					myY = radius + radius*Math.sin(myAngle); // y=r+rsin(θ)
