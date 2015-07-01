@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas study</title>
+    <style type="text/css">
+        body {margin: 0; padding: 0;}
+    </style>
+</head>
+<body>
+    <canvas id="canvas">
+        Sorry, your browser is rubbish!
+    </canvas>
+    <input type="color" name="color" id="color"/>
+    <button id="save">保存为图片</button>
+</body>
+<script type="text/javascript" src="image2base64.js"></script>
+<script type="text/javascript">
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var radius = 5;
+    var dragging = false;
+    
+    var $color = document.querySelector('#color');
+    var $save = document.querySelector('#save');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    context.lineWidth = radius * 2;
+    
+    $color.addEventListener('change', function() {
+        context.fillStyle = this.value;
+        context.strokeStyle = this.value;
+    }, false);
+    
+    
+    var putPoint = function(e) {
+        if(dragging) {
+            context.lineTo(e.clientX, e.clientY);
+            context.stroke();
+            context.beginPath();
+            context.arc(e.clientX, e.clientY, radius, 0, Math.PI * 2);
+            context.fill();
+            context.beginPath();
+            context.moveTo(e.clientX, e.clientY);
+        }
+    };
+    
+    var engage = function(e) {
+        dragging = true;
+        putPoint(e);
+    };
+    
+    var disengage = function() {
+        dragging = false;
+        context.beginPath();
+    };
+    
+    
+    canvas.addEventListener('mousedown', engage);
+    canvas.addEventListener('mousemove', putPoint);
+    canvas.addEventListener('mouseup', disengage);
+    
+    
+    $save.addEventListener('click', function() {
+        var dataUrl = canvas.toDataURL('image/png');
+        
+        window.open(dataUrl, '_blank', 'location=0, menubar=0');
+    }, false);
+</script>
+</html>
