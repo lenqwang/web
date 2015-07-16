@@ -7,6 +7,8 @@ var Code = function() {
 				$('pre').html('<code class="javascript">'+$('#myscript').html()+'</code>');
 
 				hljs.initHighlightingOnLoad();
+			}, function() {
+				console('error');
 			});
 		},
 		createEl: function(tag) {
@@ -17,7 +19,7 @@ var Code = function() {
 				el.setAttribute(k, attrs[k]);
 			}
 		},
-		insertScript: function(src, callback) {
+		insertScript: function(src, callback, err) {
 			var script = this.createEl('script'), 
 				lastScript = document.getElementsByTagName('script');
 				len = lastScript.length;
@@ -28,17 +30,33 @@ var Code = function() {
 				'type': 'text/javacript'
 			});
 
-			script.onload = callback = onreadystatechange = function() {
-				var ret = (!done && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete'));
-				console.log(ret);
-				if(ret) {
-					done = true;
+			if(script.readyState) {
+				script.onreadystatechange = function() {
+					if(script.readyState === 'loaded' || script.readyState === 'complete') {
+						script.onreadystatechange = null;
+						callback();
+					}
+				};
+			}
+			else {
+				script.onload = function() {
+					console.log('i am callback');
+				};
+			}
 
-					callback();
+			script.onerror =  err;
 
-					script.onload = script.onreadystatechange = null;
-				}
-			};
+			// script.onload = script.onreadystatechange = function() {
+			// 	var ret = (!done && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete'));
+			// 	console.log(ret);
+			// 	if(ret) {
+			// 		done = true;
+
+			// 		callback();
+
+			// 		script.onload = script.onreadystatechange = null;
+			// 	}
+			// };
 
 			document.body.insertBefore(script, lastScript[len-1]);
 		},
