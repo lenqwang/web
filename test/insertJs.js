@@ -1,14 +1,13 @@
 var Code = function() {
 	var fn = {
-		init: function() {
+		init: function(callback) {
 			this.insertLink('/project/demo1/lib/vendors/bower_components/highlight/styles/monokai_sublime.css');
 			this.insertScript('/project/demo1/lib/vendors/bower_components/highlight/highlight.pack.js', function() {
-				console.log(111);
 				$('pre').html('<code class="javascript">'+$('#myscript').html()+'</code>');
 
 				hljs.initHighlightingOnLoad();
-			}, function() {
-				console('error');
+
+				callback && callback();
 			});
 		},
 		createEl: function(tag) {
@@ -21,42 +20,27 @@ var Code = function() {
 		},
 		insertScript: function(src, callback, err) {
 			var script = this.createEl('script'), 
-				lastScript = document.getElementsByTagName('script');
+				lastScript = document.getElementsByTagName('script'),
+				done = false,
 				len = lastScript.length;
-				done = false;
+
 			this.setAttributes(script, {
-				'src': src,
-				'charset': 'utf-8',
-				'type': 'text/javacript'
+				'type': 'text/javascript',
+				'src': src
 			});
 
-			if(script.readyState) {
-				script.onreadystatechange = function() {
-					if(script.readyState === 'loaded' || script.readyState === 'complete') {
-						script.onreadystatechange = null;
-						callback();
-					}
-				};
-			}
-			else {
-				script.onload = function() {
-					console.log('i am callback');
-				};
-			}
+			script.onload = script.onreadystatechange = function() {
+				var ret = (!done && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete'));
+				if(ret) {
+					done = true;
 
-			script.onerror =  err;
+					callback();
 
-			// script.onload = script.onreadystatechange = function() {
-			// 	var ret = (!done && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete'));
-			// 	console.log(ret);
-			// 	if(ret) {
-			// 		done = true;
+					script.onload = script.onreadystatechange = null;
+				}
+			};
 
-			// 		callback();
-
-			// 		script.onload = script.onreadystatechange = null;
-			// 	}
-			// };
+			if(err) script.onerror = err;
 
 			document.body.insertBefore(script, lastScript[len-1]);
 		},
