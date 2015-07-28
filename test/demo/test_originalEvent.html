@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test originalEvent</title>
+</head>
+<body>
+    <div class="demo">
+        <button class="test">点击测试originalEvent</button>
+    </div>
+
+    <script>
+        var g = function(el) {
+            return document.querySelector(el);
+        };
+
+        g('.demo').addEventListener('click', function (e) {
+            console.log(e.originalEvent);
+        }, false)
+    </script>
+</body>
+</html>
