@@ -3,23 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Vue demo</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="demo">
         <input type="text" v-model="message"/>
         <p>{{message}}</p>
     </div>
+    
+    <!-- template for the polygraph component. -->
+    <script type="text/x-template" id="polygraph-template">
+      <g>
+        <polygon v-attr="points:points"></polygon>
+        <circle cx="100" cy="100" r="80"></circle>
+        <axis-label v-repeat="stats"></axis-label>
+      </g>
+    </script>
 
+    <!-- template for the axis label component. -->
+    <script type="text/x-template" id="axis-label-template">
+      <text v-attr="x:point.x, y:point.y">{{label}}</text>
+    </script>
+
+    <!-- demo root element -->
+    <div id="demo2">
+      <!-- Use the component -->
+      <svg width="200" height="200">
+        <polygraph stats="{{stats}}"></polygraph>
+      </svg>
+      <!-- controls -->
+      <div v-repeat="stats">
+        <label>{{label}}</label>
+        <input type="range" v-model="value" min="0" max="100">
+        <span>{{value}}</span>
+        <button v-on="click:remove(this)">X</button>
+      </div>
+      <form id="add">
+        <input name="newlabel" v-model="newLabel">
+        <button v-on="click:add">Add a Stat</button>
+      </form>
+      <pre id="raw">{{stats | json}}</pre>
+    </div>
+      
+    <p style="font-size:12px">* input[type="range"] requires IE10 or above.</p>
 
 
     <script src="../bower_components/vue/dist/vue.min.js"></script>
+    <script src="js/app.js"></script>
     <script>
         var demo = new Vue({
             el:'#demo',
             data: {
                 message: 'hello vue!'
             }
-        })
+        });
     </script>
 </body>
 </html>
