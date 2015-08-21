@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>vue transition</title>
+    <style>
+        .expand-transition {
+            transition: all .3s ease;
+            height: 30px;
+            padding: 10px;
+            background-color: #eee;
+            overflow: hidden;
+        }
+        .expand-enter, .expand-leave {
+            height: 0;
+            padding: 0 10px;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="demo">
+        <div v-if="show" v-transition="expand">hello</div>
+        <button v-on="click: show = !show">Toggle</button>
+    </div>
+
+<script src="../bower_components/vue/dist/vue.min.js"></script>
+<script>
+    Vue.transition('expand', {
+        beforeEnter: function (el) {
+            el.textContent = 'beforeEnter'
+        },
+        enter: function (el) {
+            el.textContent = 'enter'
+        },
+        afterEnter: function (el) {
+            el.textContent = 'afterEnter'
+        },
+        enterCancelled: function (el) {
+//
+        },
+        beforeLeave: function (el) {
+            el.textContent = 'beforeLeave'
+        },
+        leave: function (el) {
+            el.textContent = 'leave'
+        },
+        afterLeave: function (el) {
+            el.textContent = 'afterLeave'
+        },
+        leaveCancelled: function (el) {
+//
+        }
+
+    });
+
+    new Vue({
+        el: '#demo',
+        data: {
+            show: true,
+//            transitionState: 'Idle'
+        }
+    });
+</script>
+</body>
+</html>
