@@ -18,3 +18,5 @@ var extend = function(child, parent) {
     
     child.prototype = new __();
 };
+
+

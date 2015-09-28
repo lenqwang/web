@@ -3,15 +3,40 @@
     <head>
         <meta charset="utf-8"/>
         <title>测试modal.js</title>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" type="text/css" />
+        <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" type="text/css" />-->
         
     </head>
     <body>
         <a id="btn" data-toggle="modal">click me</a>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="modal.js"></script>
+        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+        <script src="undo.js"></script>
         <script>
+            var EditCommand = Undo.Command.extend({
+                constructor: function(text, oldValue, newValue) {
+                    this.text = text;
+                    this.oldValue = oldValue;
+                    this.newValue = newValue;
+                },
+                execute: function() {
+
+                },
+                undo: function() {
+                    this.text = this.text + this.oldValue;
+                },
+                redo: function() {
+                    this.text = this.text + this.newValue;
+                }
+            });
+
+            undo_stack.execute(new EditCommand('hello', 'old', 'new'));
+
+            // undo
+            undo_stack.undo();
+
+            //redo
+            undo_stack.redo();
+
             // version 1
             // Modal.init({
             //     title: '测试',
@@ -37,10 +62,10 @@
             // });
             
             // version 2
-            $('#btn').click(function() {
-                
-                Modal.init({
-                    width: 200
+//            $('#btn').click(function() {
+//
+//                Modal.init({
+//                    width: 200
                     // buttons: [
                     //     {
                     //         type: 'button',
@@ -65,8 +90,8 @@
                     //         }
                     //     }
                     // ]
-                });
-            });
+//                });
+//            });
             
         </script>
     </body>
