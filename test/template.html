@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js 模版引擎的实现</title>
+</head>
+<body>
+
+<script>
+    var tpl = 'Hei, my name is {name}, and I\'m {age} years old.';
+    var data = {
+        name: 'lenq',
+        age: 26,
+        posts: {
+            expert: 'haha',
+            time: '0928'
+        }
+    };
+
+    var tpl2 = '<% for(var i = 0; i < this.posts.length; i++) {' +
+            'var post = posts[i]; %>' +
+            '<% if(!post.expert){ %>' +
+            '<span>post is null</span>' +
+            '<% } else { %>' +
+            '<a href="#"><% post.expert %> at <% post.time %></a>' +
+            '<% } %>' +
+            '<% } %>';
+
+//    var args = ['a', 'b', 'return(a + b)'];
+//
+//    var rest = Function.apply(null, args);
+//
+//    var resut1 = new Function('name', 'age','hello word! i am name');
+//    console.log(new rest());
+
+    var tplEngine = function(tpl, data) {
+        var reg = /<%([^%>]+)?%>/g,   //     /{([^{}>]+)}/g
+                code = 'var r = [];\n',
+                regOut = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g,
+                cursor = 0;
+
+        var add = function (line, js) {
+            js ? (code += line.match(regOut) ? line + '\n' : 'r.push('+ line +');\n') :
+                    (code += line != '' ? 'r.push("'+ line.replace(/"/g, '\\"') +'");\n' : '');
+
+            return add;
+        };
+
+        while(match = reg.exec(tpl)) {
+            add(tpl.slice(cursor, match.index))(match[1], true);
+            cursor = match.index + match[0].length;
+        }
+
+        add(tpl.substr(cursor, tpl.length - cursor));
+
+        code += 'return r.join("");';
+
+        console.log(code);
+//        return tpl;
+        return new Function(code.replace(/[\r\t\n]/g, '')).apply(data);
+    };
+//
+    var html = tplEngine(tpl2, data);
+
+    console.log(html);
+</script>
+</body>
+</html>

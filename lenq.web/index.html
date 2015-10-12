@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>commonjs demo</title>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Roboto:400,700,700italic,400italic">
+	<style>
+		html,body {
+			font-size: 14px;
+			font-family: Roboto,sans-serif!important;
+			color: #222;
+		}
+	</style>
+</head>
+<body>
+	<div class="col-md-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">checkbox checked/nochecked test</div>
+			<div id="checkbox">
+				<table class="table table-striped table-bordered table-horver">
+					<tr>
+						<th><input type="checkbox"></th>
+						<th>ID</th>
+						<th>name</th>
+						<th>title</th>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>1</td>
+						<td>jack</td>
+						<td>web front end worker</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>2</td>
+						<td>lucy</td>
+						<td>web front end worker</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>3</td>
+						<td>divide</td>
+						<td>web front end worker</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>4</td>
+						<td>jobs</td>
+						<td>web front end worker</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="vendor/common.js"></script>
+	<script>
+		Common.selectAll('#checkbox');
+	</script>
+</body>
+</html>
