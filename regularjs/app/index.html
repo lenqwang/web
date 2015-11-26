@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>regularjs test</title>
+    <link rel="stylesheet" href="app.css"/>
+</head>
+<body>
+
+    <div id="app"></div>
+
+    <script id="helloworld" type="text/regular">
+        Hello
+        {#if user}
+            <strong> &cent;  {user} </strong>, <a href="#" on-click={user = null}>logout</a>
+            <input type="text" r-model={draf} on-enter={this.add(draf)}/>
+            <ul class="list">
+                <h3>you have {todos.length} todos</h3>
+                {#list todos as todo}
+                    <li class={todo.completed ? 'completed': ''}>
+                        {todo.content} <a href="#" on-click={this.remove(todo_index)}>X</a>
+                    </li>
+                {/list}
+            </ul>
+        {#else}
+            Friend, please <a href="#" on-click={this.login()}>login</a>
+        {/if}
+    </script>
+
+    <script id="markdown" type="text/regular">
+        <a href={link}>{link}</a>
+        <textarea r-model="content">#hello</textarea>
+        <div r-markdown={content}></div>
+    </script>
+
+<script src="../bower_components/regularjs/dist/regular.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/markdown.js/0.5.0/markdown.min.js"></script>
+<script>
+//    var Note = Regular.extend({
+//        template: '<input {#if !disabled} r-model="hello" {#else} disabled {/if} /> {hello}' +
+//        '<button on-click={disabled = !disabled}>{disabled ? "active" : "disable"} it</button>'
+//    });
+//
+//    var note = new Note().$inject('#app');
+
+//    定义enter事件
+    var dom = Regular.dom;
+    Regular.event('enter', function(elem, fire) {
+        function update(ev) {
+            if(ev.which == 13) {
+                ev.preventDefault();
+                fire(ev);
+            }
+        }
+        dom.on(elem, 'keypress', update);
+        return function destory() {
+            dom.off(elem, 'keypress', update);
+        }
+    });
+
+    var LoginApp = Regular.extend({
+        template: '#helloworld',
+        data: {
+            todos: []
+        },
+        add: function(draf) {
+            var data = this.data;
+            data.todos.push({content: draf});
+            data.draf = '';
+        },
+        remove: function(index) {
+            this.data.todos.splice(index, 1);
+            return false;
+        },
+        login: function() {
+            var data = this.data;
+
+            data.user = prompt('请输入用户名', '');
+            return false;
+        }
+    });
+
+//    var application = new LoginApp().$inject('#app');
+
+    Regular.directive('r-markdown', function(elem, value) {
+        this.$watch(value, function(nvalue) {
+            elem.innerHTML = markdown.toHTML(nvalue);
+        });
+    });
+
+    var application = new Regular({
+        template: '#markdown',
+        data: {
+            link: 'http://res.nie.netease.com/r/pic/20150929/da65a2b8-4336-4877-afb6-e5f8d50823a0'
+        }
+    }).$inject('#app');
+
+</script>
+</body>
+</html>
