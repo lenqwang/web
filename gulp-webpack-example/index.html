@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test gulp webpack</title>
+	<link rel="stylesheet" href="dist/css/style.css">
+</head>
+<body>
+	<div id="app" class="demo">
+		<modal :show.sync="showModal">
+			<h3 slot="header">标题</h3>
+			<div slot="body">
+				<p>我是内容啊</p>
+			</div>
+			<!-- <footer slot="footer">
+				<button @click="showModal = false">ok</button>
+			</footer> -->
+		</modal>
+		<button @click="showModal = true">show</button>
+	</div>
+	<script src="dist/js/main.js"></script>
+</body>
+</html>
