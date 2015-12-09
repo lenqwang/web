@@ -75,7 +75,7 @@ gulp.task('postcss', function() {
 
 // 压缩图片
 gulp.task('minimg', function() {
-    return gulp.src('./src/image/*')
+    return gulp.src(['./src/image/*', './dist/js/src/image/*'])
         .pipe(imagemin({
             progressive: true,
             use: [pngquant()]
@@ -84,6 +84,6 @@ gulp.task('minimg', function() {
 });
 
 gulp.task('default', ['webpack'], function() {
-	console.log(process.env.NODE_ENV);
+	// console.log(process.env.NODE_ENV);
 	gulp.start('mincss', 'minjs', 'minimg');
 });

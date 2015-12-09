@@ -3,21 +3,19 @@
 <head>
 	<meta charset="UTF-8">
 	<title>test gulp webpack</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalabe=no" />
 	<link rel="stylesheet" href="dist/css/style.css">
 </head>
 <body>
-	<div id="app" class="demo">
-		<modal :show.sync="showModal">
-			<h3 slot="header">标题</h3>
-			<div slot="body">
-				<p>我是内容啊</p>
-			</div>
-			<!-- <footer slot="footer">
-				<button @click="showModal = false">ok</button>
-			</footer> -->
-		</modal>
-		<button @click="showModal = true">show</button>
-	</div>
-	<script src="dist/js/main.js"></script>
+	<!--<example-zoom></example-zoom>-->
+	<!-- <my-component></my-component>
+	<example-pinyin></example-pinyin>
+
+	<img src="" alt="" v-el:my-image />
+	<button type="button" @click="getRequest">显示图片</button> -->
+	
+	<div id="app"></div>
+
+	<script src="dist/js/app.js"></script>
 </body>
 </html>

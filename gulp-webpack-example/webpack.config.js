@@ -3,6 +3,7 @@ var webpack = require('webpack');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 var baseDir = path.resolve(__dirname, 'src');
+var distDir = path.resolve(__dirname, 'dist');
 
 module.exports = {
 	entry: {
@@ -19,7 +20,8 @@ module.exports = {
 		// textcreate: path.resolve(__dirname, 'static/js/res/app/textcreate.js'),
 		// sy_sucai: path.resolve(__dirname, 'static/js/res/app/sy_sucai.js'),
 		// textsent: path.resolve(__dirname, 'static/js/res/app/textsent.js')
-		main: path.resolve(__dirname, 'src/js/main.js')
+		// main: path.resolve(__dirname, 'src/js/main.js')
+		app: path.resolve(__dirname, 'src/js/app.js')
 	},
 	output: {
 		filename: '[name].js',
@@ -33,7 +35,13 @@ module.exports = {
 			},
 			{
 				test: /\.js$/,
-				loader: 'babel'
+				loader: 'babel',
+				exclude: /node_modules|vue\/dist/,
+				query: {
+			      presets: ['es2015'],
+			      plugins: ['transform-runtime'],
+			      cacheDirectory: true
+			    }
 			},
 			{
 				test: /\.vue$/,
@@ -45,7 +53,7 @@ module.exports = {
 			},
 			{
 				test: /\.(png|jpg|gif|bmp)$/,
-				loader: 'file-loader?name=../[path][name].[ext]'
+				loader: 'file-loader?name=[path][name].[ext]?[hash]'
 			},
 			{
 				test: require.resolve('jquery'),

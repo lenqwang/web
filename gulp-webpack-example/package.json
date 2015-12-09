@@ -4,7 +4,8 @@
   "description": "use gulp dist project",
   "main": "index.js",
   "scripts": {
-    "test": "gulp"
+    "test": "gulp",
+    "dev": "webpack-dev-server --inline --hot"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "css-loader": "^0.23.0",
     "cssnext": "^1.8.4",
     "del": "^2.2.0",
+    "expose-loader": "^0.7.1",
     "file-loader": "^0.8.5",
     "gulp": "^3.9.0",
     "gulp-imagemin": "^2.4.0",
@@ -46,10 +48,14 @@
     "vue-hot-reload-api": "^1.2.2",
     "vue-html-loader": "^1.0.0",
     "vue-loader": "^7.2.0",
-    "webpack": "^1.12.9"
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
   },
   "devDependencies": {
+    "ix": "^1.0.6",
     "jquery": "^2.1.4",
-    "vue": "^1.0.10"
+    "pinyin": "^2.6.2",
+    "vue": "^1.0.10",
+    "vue-router": "^0.7.7"
   }
 }
